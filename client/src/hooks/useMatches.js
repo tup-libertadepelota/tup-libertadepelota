@@ -29,7 +29,7 @@ export function useMatches() {
           }
         );
 
-        if (!res.ok) throw new Error("Error en la API");
+        if (!res.ok) throw new Error("errors.api");
 
         const data = await res.json();
         setMatches(data.response);
@@ -43,7 +43,7 @@ export function useMatches() {
         );
       } catch (error) {
         console.error(error)
-        setError("No se pudieron cargar los partidos");
+        setError("errors.loadMatches");
       } finally {
         setLoading(false)
       }

@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { useMatches } from "../hooks/useMatches";
 import {Button, CircularProgress } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 export default function Items() {
   const loaderRef = useRef(null)
+  const { t } = useTranslation();
 
   const { matches, loading, error } = useMatches();
 
@@ -27,10 +29,9 @@ const sortedMatches = [...filteredMatches].sort((a,b) => {
   if(sort === 'date'){
     return new Date(b.fixture.date) - new Date(a.fixture.date)
   }
-  if (sort === "home"){
-    return a.teams.home.name.localeCompare(b.teams.home.name)
-  }
-  if (sort ==="away"){
+  if (sort === 'name') {
+    const homeCompare = a.teams.home.name.localeCompare(b.teams.home.name)
+    if (homeCompare !== 0) return homeCompare
     return a.teams.away.name.localeCompare(b.teams.away.name)
   }
   if(sort === "score") {
@@ -53,13 +54,15 @@ useEffect(() => {
       }
     })
 
-    if(loaderRef.current){
-      observer.observe(loaderRef.current)
+    const current = loaderRef.current
+
+    if(current){
+      observer.observe(current)
     }
 
     return () => {
-      if(loaderRef.current){
-        observer.unobserve(loaderRef.current)
+      if(current){
+        observer.unobserve(current)
       }
     }
 }, [limit, sortedMatches.length])
@@ -72,40 +75,36 @@ useEffect(() => {
     )
   }
 
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error) return <p className="text-red-500">{t(error)}</p>;
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-        <span>Partidos</span>
+        <span>{t('items.title')}</span>
       </h2>
 
     <div  className="flex items-center gap-4">
+      <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
       <select 
         value={sort} 
         onChange={(e) => setSort(e.target.value)}
         className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
       >
+        <option value="name" className='bg-slate-800 text-white'>
+          {t('items.filter.name')}
+        </option>
         <option value="date" className='bg-slate-800 text-white'>
-          Fecha
-        </option>
-
-        <option value="home" className='bg-slate-800 text-white'>
-          Equipo Local
-        </option>
-
-        <option value="away" className='bg-slate-800 text-white'>
-          Equipo Visitante
+          {t('items.filter.date')}
         </option>
 
         <option value="score" className='bg-slate-800 text-white'>
-          Goles totales
+          {t('items.filter.score')}
         </option>
       </select>
 
       <input 
         type="text"
-        placeholder="buscar equipo..."
+        placeholder={t('items.searchPlaceholder')}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
@@ -114,7 +113,7 @@ useEffect(() => {
 
     {sortedMatches.length === 0 && !loading && (
       <p className="text-gray-400 text-center">
-        No se encontraron los partidos
+        {t('items.noMatches')}
       </p>
     )}
 

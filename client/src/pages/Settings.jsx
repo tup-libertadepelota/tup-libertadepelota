@@ -14,8 +14,10 @@ import {
 import LogoutIcon from "@mui/icons-material/Logout";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import logo from "../assets/images/logo.png";
+import { useTranslation } from 'react-i18next';
 
 export default function Settings() {
+  const { t } = useTranslation();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -36,7 +38,7 @@ export default function Settings() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-[#00ff9c]">
-          Configuración
+          {t('settings.title')}
         </h2>
 
         <Button
@@ -56,12 +58,12 @@ export default function Settings() {
             },
           }}
         >
-          Cerrar sesión
+          {t('settings.logout')}
         </Button>
       </div>
 
       <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-        <span>Opciones del usuario</span>
+        <span>{t('settings.userOptions')}</span>
       </div>
 
       <div className="bg-white/5 p-6 rounded-xl border border-white/10 flex items-center gap-5">
@@ -101,13 +103,12 @@ export default function Settings() {
           },
         }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>
-          ¿Cerrar sesión?
+          <DialogTitle sx={{ fontWeight: 700 }}>
+          {t('settings.logoutDialogTitle')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: "#9ca3af" }}>
-            Estás a punto de cerrar tu sesión. Tendrás que volver a iniciar
-            sesión para acceder a la aplicación.
+            {t('settings.logoutDialogText')}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -115,7 +116,7 @@ export default function Settings() {
             onClick={() => setLogoutDialogOpen(false)}
             sx={{ textTransform: "none", color: "#9ca3af" }}
           >
-            Cancelar
+            {t('settings.logoutCancel')}
           </Button>
           <Button
             onClick={handleLogout}
@@ -123,7 +124,7 @@ export default function Settings() {
             color="error"
             sx={{ textTransform: "none", fontWeight: 600 }}
           >
-            Sí, cerrar sesión
+            {t('settings.logoutConfirm')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -131,7 +132,7 @@ export default function Settings() {
       <div className="bg-white/5 p-6 rounded-xl border border-white/10 space-y-4">
         <div className="flex items-center gap-2 text-gray-400 text-sm font-medium mb-2">
           <InfoOutlinedIcon fontSize="small" />
-          <span>Acerca de la aplicación</span>
+          <span>{t('settings.aboutTitle')}</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -142,10 +143,10 @@ export default function Settings() {
           />
           <div>
             <span className="text-lg font-bold text-[var(--color-primary)]">
-              LibertaDEpelota
+              {t('app.title')}
             </span>
             <p className="text-xs text-gray-500">
-              Tu app de fútbol favorita
+              {t('app.subtitle')}
             </p>
           </div>
         </div>
@@ -154,11 +155,11 @@ export default function Settings() {
 
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-400">Versión</span>
+            <span className="text-gray-400">{t('settings.version')}</span>
             <span className="text-white font-mono">1.0.0</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-gray-400">User Agent</span>
+            <span className="text-gray-400">{t('settings.userAgent')}</span>
             <span className="text-white/70 text-xs font-mono break-all bg-white/5 px-3 py-2 rounded-lg">
               {navigator.userAgent}
             </span>

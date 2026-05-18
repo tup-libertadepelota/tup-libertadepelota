@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 export default function Sidebar() {
   const {pathname} = useLocation();
+  const { t } = useTranslation();
 
 
   const linkClass = (path) => 
@@ -15,16 +17,16 @@ export default function Sidebar() {
   return (
     <div className="h-full p-4 backdrop-blur-md bg-white/5 border-r border-white/10">
       <h1 className="text-xl font-bold text-[#578056] mb-6">
-        LibertaDEpelota
+        {t('app.title')}
       </h1>
 
       <nav className="flex flex-col gap-2">
         <Link to="/" className={linkClass("/")}>
-          Partidos
+          {t('nav.matches')}
         </Link>
 
         <Link to="/settings" className={linkClass("/settings")}>
-          Configuración
+          {t('nav.settings')}
         </Link>
       </nav>
     </div>

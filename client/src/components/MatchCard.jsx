@@ -1,6 +1,8 @@
 import { formatMatchDate } from "../utils/formatDate";
+import { useTranslation } from 'react-i18next';
 
 export default function MatchCard({ match }) {
+  const { t } = useTranslation();
   return (
     <div className="bg-white/5 border border-white/10 rounded-xl p-6">
       
@@ -50,10 +52,10 @@ export default function MatchCard({ match }) {
         </div>
 
         <div className="mt-6 text-sm text-gray-400 space-y-1">
-          <p>Árbitro: {match.fixture.referee || "No informado"}</p>
+          <p>{t('match.referee', { referee: match.fixture.referee || t('match.noInfo') })}</p>
 
           <p>
-            Estadio: {match.fixture.venue.name || "No informado"}
+            {t('match.stadium', { venue: match.fixture.venue.name || t('match.noInfo') })}
           </p>
         </div>
 
