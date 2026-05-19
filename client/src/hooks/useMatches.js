@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useMatches() {
-  const [matches, setMatches] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const cached = JSON.parse(localStorage.getItem("matches"));
+    const cached = JSON.parse(localStorage.getItem('matches'));
 
     if (cached) {
       const isExpired = Date.now() - cached.timestamp > 5 * 60 * 1000;
@@ -21,38 +21,36 @@ export function useMatches() {
     const fetchMatches = async () => {
       try {
         const res = await fetch(
-          "https://v3.football.api-sports.io/fixtures?league=128&season=2024",
+          'https://v3.football.api-sports.io/fixtures?league=128&season=2024',
           {
             headers: {
-              "x-apisports-key": import.meta.env.VITE_API_KEY_FOOTBALL,
+              'x-apisports-key': import.meta.env.VITE_API_KEY_FOOTBALL,
             },
           }
         );
 
-        if (!res.ok) throw new Error("errors.api");
+        if (!res.ok) throw new Error('errors.api');
 
         const data = await res.json();
         setMatches(data.response);
 
         localStorage.setItem(
-          "matches",
+          'matches',
           JSON.stringify({
             data: data.response,
             timestamp: Date.now(),
           })
         );
       } catch (error) {
-        console.error(error)
-        setError("errors.loadMatches");
+        console.error(error);
+        setError('errors.loadMatches');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
 
-    fetchMatches()
-  }, [])
+    fetchMatches();
+  }, []);
 
-  return { matches, loading, error }
+  return { matches, loading, error };
 }
-
-
