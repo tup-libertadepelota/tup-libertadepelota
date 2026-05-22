@@ -23,20 +23,17 @@ const filteredMatches = matches.filter((match) => {
   ) 
 })
 
-const sortedMatches = [...filteredMatches].sort((a,b) => {
-  if(sort === 'date'){
+const sortedMatches = [...filteredMatches].sort((a, b) => {
+  if (sort === 'date') {
     return new Date(b.fixture.date) - new Date(a.fixture.date)
   }
-  if (sort === "home"){
+  if (sort === 'name') {
     return a.teams.home.name.localeCompare(b.teams.home.name)
   }
-  if (sort ==="away"){
-    return a.teams.away.name.localeCompare(b.teams.away.name)
+  if (sort === 'score') {
+    return (b.goals.home + b.goals.away) - (a.goals.home + a.goals.away)
   }
-  if(sort === "score") {
-    return (b.goals.home + b.goals.away) - (a.goals.home + a.goals.away);
-  }
-  return 0;
+  return 0
 })
 
 useEffect(() => {
@@ -80,22 +77,22 @@ useEffect(() => {
         <span>Partidos</span>
       </h2>
 
-    <div  className="flex items-center gap-4">
+    <div className="flex items-center gap-4">
+      <label htmlFor="sortSelect" className="text-base text-gray-300">
+        Sort by
+      </label>
       <select 
+        id="sortSelect"
         value={sort} 
         onChange={(e) => setSort(e.target.value)}
         className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
       >
+        <option value="name" className='bg-slate-800 text-white'>
+          Nombre
+        </option>
+
         <option value="date" className='bg-slate-800 text-white'>
           Fecha
-        </option>
-
-        <option value="home" className='bg-slate-800 text-white'>
-          Equipo Local
-        </option>
-
-        <option value="away" className='bg-slate-800 text-white'>
-          Equipo Visitante
         </option>
 
         <option value="score" className='bg-slate-800 text-white'>
