@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx"
 import {Button, CircularProgress, Divider} from '@mui/material'
@@ -9,29 +9,24 @@ import logo from '../assets/images/logo.png'
 
 export default function Login(){
 
-  const [loading, setLoading] = useState(false)
 
   const [googleLoading, setGoogleLoading] = useState(false)
 
-
-  const { login } = useAuth()
+  const { user } = useAuth();
   const navigate = useNavigate();
 
 
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      login();
-      navigate('/');
-    }, 2000);
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/');
     } catch (error) {
       console.error(error);
       setGoogleLoading(false);
@@ -44,16 +39,6 @@ export default function Login(){
       <div className="flex flex-col items-center gap-2">
         <img src={logo} className="w-60 h-60" alt="" />
       </div>
-
-      <Button
-        variant="contained"
-        onClick={handleLogin}
-        disabled={loading}
-        startIcon={loading ? <CircularProgress size={18} color="inherit"/> : null}
-      >
-
-        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
-      </Button>
 
       <div className="flex items-center w-64 gap-3">
         <Divider sx={{ flex: 1, borderColor: '#d1d5db' }} />
@@ -94,8 +79,6 @@ export default function Login(){
         }}
       >
         {googleLoading ? 'Conectando...' : 'Iniciar sesión con Google'}
-
-        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
       </Button>
     </div>
   )

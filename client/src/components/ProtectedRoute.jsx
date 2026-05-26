@@ -4,10 +4,12 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 
 export default function ProtectedRouter({children}){
-  const {isAuthenticated} = useAuth();
+  const {user, loading} = useAuth()
+
+  if (loading) return null
 
 
-  if (!isAuthenticated){
+  if (!user){
     return <Navigate to="/login" replace/>;
   }
 

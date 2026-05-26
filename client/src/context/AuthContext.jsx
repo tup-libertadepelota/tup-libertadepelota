@@ -8,9 +8,6 @@ import { auth } from "../firebase_config.js";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("session") === "true";
-  })
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,22 +22,14 @@ export function AuthProvider({ children }) {
           name: firebaseUser.displayName || firebaseUser.email,
           picture: firebaseUser.photoURL || '',
         });
-        sessionStorage.setItem("session", "true");
-        setIsAuthenticated(true);
       } else {
         setUser(null);
       }
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
-
-  const login = () => {
-    sessionStorage.setItem("session", "true");
-    setIsAuthenticated(true);
-  }
 
   const logout = async () => {
     try {
@@ -48,14 +37,11 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.log(error);
     }
-    sessionStorage.removeItem("session");
-    setUser(null);
-    setIsAuthenticated(false);
   }
 
 
   return (
-    <AuthContext.Provider value={{isAuthenticated, user, loading, login, logout}}>
+    <AuthContext.Provider value={{ user, loading, logout }}>
       {children}
     </AuthContext.Provider>
   )

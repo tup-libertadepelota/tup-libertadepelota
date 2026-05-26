@@ -9,14 +9,15 @@ import Items from './pages/Items.jsx'
 import Settings from './pages/Settings.jsx'
 
 function App() {
-  const {isAuthenticated} = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) return null;
 
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+          element={user ? <Navigate to="/" /> : <Login />}
         />
         <Route
           path="/"
