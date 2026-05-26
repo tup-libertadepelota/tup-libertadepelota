@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MatchCard from '../components/MatchCard';
-import { useMatches } from '../hooks/useMatches';
+import { useMatchesStore } from '../services/store/useMatchesStore';
 import { Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -8,13 +8,12 @@ export default function Items() {
   const loaderRef = useRef(null);
   const { t } = useTranslation();
 
-  const { matches, loading, error } = useMatches();
+  const { matches, loading, error, loadMatches } = useMatchesStore();
 
   const [loadingMore, setLoadingMore] = useState(false);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date');
   const [limit, setLimit] = useState(10);
-
 
   const filteredMatches = matches.filter((match) => {
     const text = search.toLowerCase();
@@ -42,16 +41,20 @@ export default function Items() {
   });
 
   useEffect(() => {
+    loadMatches();
+  }, [loadMatches]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const target = entries[0];
 
       if (target.isIntersecting && limit < sortedMatches.length) {
         setLoadingMore(true);
-        
-         setTimeout(() => {
+
+        setTimeout(() => {
           setLimit((prev) => prev + 10);
           setLoadingMore(false);
-         }, 800);
+        }, 800);
       }
     });
 
