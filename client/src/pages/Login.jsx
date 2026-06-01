@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx"
+import { useAuth } from "../hooks/useAuth.js"
 import {Button, CircularProgress, Divider} from '@mui/material'
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase_config.js";
 import logo from '../assets/images/logo.png'
-
+import { loginWithGoogle } from "../services/authService.js";
 
 export default function Login(){
 
@@ -26,7 +24,7 @@ export default function Login(){
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      await loginWithGoogle();
     } catch (error) {
       console.error(error);
       setGoogleLoading(false);

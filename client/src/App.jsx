@@ -1,6 +1,7 @@
 import React from 'react'
 import './styles/index.css'
-import { AuthProvider, useAuth } from './context/AuthContext.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
+import { useAuth } from './hooks/useAuth.js'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute.jsx'

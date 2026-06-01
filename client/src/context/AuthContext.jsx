@@ -1,11 +1,6 @@
-
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth";
-import { auth } from "../firebase_config.js";
-
-
-
-const AuthContext = createContext(null);
+import React, { useState, useEffect } from "react";
+import { subscribeToAuthChanges, logoutUser } from "../services/authService.js";
+import { AuthContext } from "./authContext.js";
 
 export function AuthProvider({ children }) {
 
@@ -14,26 +9,17 @@ export function AuthProvider({ children }) {
 
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-          uid: firebaseUser.uid,
-          email: firebaseUser.email || '',
-          name: firebaseUser.displayName || firebaseUser.email,
-          picture: firebaseUser.photoURL || '',
-        });
-      } else {
-        setUser(null);
-      }
+    const unsubscribe = subscribeToAuthChanges((user) => {
+      setUser(user);
       setLoading(false);
-    });
+    })
     return () => unsubscribe();
   }, []);
 
 
   const logout = async () => {
     try {
-      await firebaseSignOut(auth);
+      await logoutUser();
     } catch (error) {
       console.log(error);
     }
@@ -45,8 +31,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  return useContext(AuthContext)
 }
