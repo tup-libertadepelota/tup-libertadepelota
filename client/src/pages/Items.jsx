@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { useMatches } from "../hooks/useMatches";
 import {Button, CircularProgress } from '@mui/material'
