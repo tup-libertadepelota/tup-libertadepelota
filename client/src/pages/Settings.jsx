@@ -37,9 +37,31 @@ export default function Settings() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-[#00ff9c] mb-4">
-        <span>Configuración</span>
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold text-[#00ff9c]">
+          Configuración
+        </h2>
+
+        <Button
+          variant="text"
+          color="error"
+          small
+          startIcon={<LogoutIcon />}
+          onClick={() => setLogoutDialogOpen(true)}
+          sx={{
+            textTransform: "none",
+            fontWeight: 500,
+            color: "#ef4444",
+            opacity: 0.8,
+            "&:hover": {
+              backgroundColor: "rgba(239,68,68,0.08)",
+              opacity: 1,
+            },
+          }}
+        >
+          Cerrar sesión
+        </Button>
+      </div>
 
       <div className="bg-white/5 p-4 rounded-xl border border-white/10">
         <span>Opciones del usuario</span>
@@ -66,28 +88,6 @@ export default function Settings() {
             {user.role}
           </span>
         </div>
-      </div>
-
-      <div className="bg-white/5 p-5 rounded-xl border border-white/10">
-        <Button
-          variant="outlined"
-          color="error"
-          startIcon={<LogoutIcon />}
-          onClick={() => setLogoutDialogOpen(true)}
-          fullWidth
-          sx={{
-            textTransform: "none",
-            fontWeight: 600,
-            borderColor: "rgba(239,68,68,0.5)",
-            color: "#ef4444",
-            "&:hover": {
-              borderColor: "#ef4444",
-              backgroundColor: "rgba(239,68,68,0.08)",
-            },
-          }}
-        >
-          Cerrar sesión
-        </Button>
       </div>
 
       <Dialog
