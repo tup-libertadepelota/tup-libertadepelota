@@ -10,7 +10,7 @@
     "lint:staged": "lint-staged",
     "format": "prettier --write \"src/**/*.{js,jsx,css,html}\"",
     "prepare": "cd .. && husky client/.husky",
-    "preview": "vite preview"
+    "preview": "vite preview",
     "deploy": "firebase deploy --only hosting"
   },
   "lint-staged": {
