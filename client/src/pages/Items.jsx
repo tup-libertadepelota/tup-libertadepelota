@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { useMatches } from "../hooks/useMatches";
-import {Button, CircularProgress } from '@mui/material'
+import { CircularProgress } from '@mui/material';
 
 export default function Items() {
   const loaderRef = useRef(null)
