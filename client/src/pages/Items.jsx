@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { useMatches } from "../hooks/useMatches";
-import {Button, CircularProgress } from '@mui/material'
+import { CircularProgress } from '@mui/material';
+import { trackEvent } from "../utils/analytics.js";
 
 export default function Items() {
   const loaderRef = useRef(null)
@@ -35,6 +36,10 @@ const sortedMatches = [...filteredMatches].sort((a, b) => {
   }
   return 0
 })
+
+useEffect(() => {
+  trackEvent("view_matches", { match_count: matches.length });
+}, [matches.length]);
 
 useEffect(() => {
   const observer = new IntersectionObserver((entries) => {

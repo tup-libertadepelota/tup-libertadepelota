@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import {
@@ -14,9 +14,14 @@ import {
 import LogoutIcon from "@mui/icons-material/Logout";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import logo from "../assets/images/logo.png";
+import { trackEvent } from "../utils/analytics.js";
 
 export default function Settings() {
   const { logout } = useAuth();
+
+  useEffect(() => {
+    trackEvent("view_settings");
+  }, []);
   const navigate = useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 

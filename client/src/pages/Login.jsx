@@ -15,8 +15,12 @@ export default function Login(){
   const handleLogin = () => {
     setLoading(true);
     setTimeout(() => {
-      login();
+      login({
+        name: 'Franco Urrutia',
+        email: 'franco.urrutia@email.com',
+      });
       navigate('/');
+      setLoading(false);
     }, 2000);
   }
 
