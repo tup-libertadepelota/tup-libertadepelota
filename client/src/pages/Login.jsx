@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js"
-import {Button, CircularProgress, Divider} from '@mui/material'
-import logo from '../assets/images/logo.png'
+import { Button, CircularProgress, Divider } from "@mui/material";
+import logo from "../assets/images/logo.png";
+import { useAuth } from "../hooks/useAuth.js";
 import { loginWithGoogle } from "../services/authService.js";
 
-export default function Login(){
-
-
-  const [googleLoading, setGoogleLoading] = useState(false)
-
+export default function Login() {
+  const [googleLoading, setGoogleLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (user) {
@@ -20,17 +16,16 @@ export default function Login(){
     }
   }, [user, navigate]);
 
-
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     try {
       await loginWithGoogle();
+      navigate("/");
     } catch (error) {
       console.error(error);
       setGoogleLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-8">
@@ -39,9 +34,9 @@ export default function Login(){
       </div>
 
       <div className="flex items-center w-64 gap-3">
-        <Divider sx={{ flex: 1, borderColor: '#d1d5db' }} />
+        <Divider sx={{ flex: 1, borderColor: "#d1d5db" }} />
         <span className="text-gray-400 text-sm">o</span>
-        <Divider sx={{ flex: 1, borderColor: '#d1d5db' }} />
+        <Divider sx={{ flex: 1, borderColor: "#d1d5db" }} />
       </div>
 
       <Button
@@ -61,23 +56,23 @@ export default function Login(){
           )
         }
         sx={{
-          textTransform: 'none',
+          textTransform: "none",
           fontWeight: 600,
-          fontSize: '0.95rem',
-          color: '#3c4043',
-          borderColor: '#dadce0',
-          backgroundColor: '#fff',
-          padding: '10px 24px',
-          borderRadius: '8px',
-          '&:hover': {
-            backgroundColor: '#f7f8f8',
-            borderColor: '#d2e3fc',
-            boxShadow: '0 1px 3px rgba(60,64,67,0.15)',
+          fontSize: "0.95rem",
+          color: "#3c4043",
+          borderColor: "#dadce0",
+          backgroundColor: "#fff",
+          padding: "10px 24px",
+          borderRadius: "8px",
+          "&:hover": {
+            backgroundColor: "#f7f8f8",
+            borderColor: "#d2e3fc",
+            boxShadow: "0 1px 3px rgba(60,64,67,0.15)",
           },
         }}
       >
-        {googleLoading ? 'Conectando...' : 'Iniciar sesión con Google'}
+        {googleLoading ? "Conectando..." : "Iniciar sesión con Google"}
       </Button>
     </div>
-  )
+  );
 }
