@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx"
-import {Button, CircularProgress} from '@mui/material'
-import logo from '../assets/images/logo.png'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+import { Button, CircularProgress } from '@mui/material';
+import logo from '../assets/images/logo.png';
+import { useTranslation } from 'react-i18next';
 
+export default function Login() {
+  const { t } = useTranslation();
 
-export default function Login(){
-
-  const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
-
 
   const handleLogin = () => {
     setLoading(true);
@@ -18,7 +18,7 @@ export default function Login(){
       login();
       navigate('/');
     }, 2000);
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-8">
@@ -30,10 +30,10 @@ export default function Login(){
         variant="contained"
         onClick={handleLogin}
         disabled={loading}
-        startIcon={loading ? <CircularProgress size={18} color="inherit"/> : null}
+        startIcon={loading ? <CircularProgress size={18} color="inherit" /> : null}
       >
-        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+        {loading ? t('login.loading') : t('login.button')}
       </Button>
     </div>
-  )
+  );
 }
