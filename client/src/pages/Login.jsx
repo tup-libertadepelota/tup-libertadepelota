@@ -16,20 +16,6 @@ export default function Login() {
     }
   }, [user, navigate]);
 
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      login({
-        uid: "local-user",
-        email: "usuario@example.com",
-        name: "Usuario",
-        picture: "",
-      });
-      navigate("/");
-      setLoading(false);
-    }, 1000);
-  };
-
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     try {
