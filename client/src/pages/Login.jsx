@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, CircularProgress, Divider } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import logo from "../assets/images/logo.png";
 import { useAuth } from "../hooks/useAuth.js";
 import { loginWithGoogle } from "../services/authService.js";
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const { user, login } = useAuth();
+  const { user} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,13 +46,6 @@ export default function Login() {
       <div className="flex flex-col items-center gap-2">
         <img src={logo} className="w-60 h-60" alt="" />
       </div>
-
-      <Button variant="contained" onClick={handleLogin} disabled={loading}>
-        <span className="flex items-center gap-2">
-          {loading ? <CircularProgress size={18} color="inherit" /> : null}
-          <span>{loading ? "Iniciando sesión..." : "Iniciar sesión"}</span>
-        </span>
-      </Button>
 
       <div className="flex items-center w-64 gap-3">
         <Divider sx={{ flex: 1, borderColor: "#d1d5db" }} />
