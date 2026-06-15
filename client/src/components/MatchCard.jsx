@@ -1,12 +1,8 @@
-import { formatMatchDate } from '../utils/formatDate';
-import { useTranslation } from 'react-i18next';
+import { formatMatchDate } from "../utils/formatDate";
 
 export default function MatchCard({ match }) {
-  const { t } = useTranslation();
-
   const homeGoals = match.goals.home;
   const awayGoals = match.goals.away;
-
   const hasResult = homeGoals !== null && awayGoals !== null;
   const homeWins = hasResult && homeGoals > awayGoals;
   const awayWins = hasResult && awayGoals > homeGoals;
@@ -31,34 +27,30 @@ export default function MatchCard({ match }) {
       <div className="grid grid-cols-3 items-center text-center">
         <div className="flex flex-col items-start gap-2 min-w-0">
           <img src={match.teams.home.logo} className="w-10 h-10" alt="local" />
-
-          <h3
-            className={`font-bold text-sm md:text-base truncate max-w-full ${
-              homeWins ? 'text-winner' : awayWins ? 'text-loser' : 'text-white'
-            }`}
-          >
-            {match.teams.home.name}
+          <h3 className={`font-bold text-sm md:text-base truncate max-w-full ${
+              homeWins ? "text-winner" : awayWins ? "text-loser" : "text-white"
+            }`}>
+              {match.teams.home.name}
           </h3>
         </div>
-
+        
         <div className="flex justify-center">
           <span className="text-2xl font-black">
             <span
               className={
-                homeWins ? 'text-winner' : awayWins ? 'text-loser' : 'text-white'
+                homeWins ? "text-winner" : awayWins ? "text-loser" : "text-white"
               }
             >
-              {homeGoals ?? '-'}
+              {homeGoals ?? "-"}
             </span>
-
             <span className="text-white/40"> - </span>
 
             <span
               className={
-                awayWins ? 'text-winner' : homeWins ? 'text-loser' : 'text-white'
+                awayWins ? "text-winner" : homeWins ? "text-loser" : "text-white"
               }
             >
-              {awayGoals ?? '-'}
+              {awayGoals ?? "-"}
             </span>
           </span>
         </div>
@@ -72,7 +64,7 @@ export default function MatchCard({ match }) {
 
           <h3
             className={`font-bold text-sm md:text-base truncate max-w-full ${
-              awayWins ? 'text-winner' : homeWins ? 'text-loser' : 'text-white'
+              awayWins ? "text-winner" : homeWins ? "text-loser" : "text-white"
             }`}
           >
             {match.teams.away.name}
@@ -81,17 +73,9 @@ export default function MatchCard({ match }) {
       </div>
 
       <div className="mt-4 text-sm text-gray-400 space-y-1">
-        <p>
-          {t('match.referee', {
-            referee: match.fixture.referee || t('match.noInfo'),
-          })}
-        </p>
+        <p>Árbitro: {match.fixture.referee || "No informado"}</p>
 
-        <p>
-          {t('match.stadium', {
-            venue: match.fixture.venue.name || t('match.noInfo'),
-          })}
-        </p>
+        <p>Estadio: {match.fixture.venue.name || "No informado"}</p>
       </div>
     </div>
   );

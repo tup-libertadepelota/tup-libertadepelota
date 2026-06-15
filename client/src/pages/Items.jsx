@@ -1,131 +1,129 @@
-import React, { useEffect, useRef, useState } from 'react';
-import MatchCard from '../components/MatchCard';
-import { useMatchesStore } from '../services/store/useMatchesStore';
-import { Button, CircularProgress } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef, useState } from "react";
+import MatchCard from "../components/MatchCard";
+import { useMatches } from "../hooks/useMatches";
+import {Button, CircularProgress } from '@mui/material'
 
 export default function Items() {
-  const loaderRef = useRef(null);
-  const { t } = useTranslation();
+  const loaderRef = useRef(null)
 
-  const { matches, loading, error, loadMatches } = useMatchesStore();
+  const { matches, loading, error } = useMatches();
 
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState('date');
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [search, setSearch] = useState("")
+  const [sort, setSort] = useState("date")
   const [limit, setLimit] = useState(10);
 
-  const filteredMatches = matches.filter((match) => {
-    const text = search.toLowerCase();
-    return (
-      match.teams.home.name.toLowerCase().includes(search.toLowerCase()) ||
-      match.teams.away.name.toLowerCase().includes(search.toLowerCase()) ||
-      match.fixture.venue.name?.toLowerCase().includes(text) ||
-      match.fixture.referee?.toLowerCase().includes(text)
-    );
-  });
+const filteredMatches = matches.filter((match) => {
+  const text = search.toLowerCase();
+  return (
+    match.teams.home.name.toLowerCase().includes(search.toLowerCase()) ||
+    match.teams.away.name.toLowerCase().includes(search.toLowerCase()) ||
+    match.fixture.venue.name?.toLowerCase().includes(text) ||
+    match.fixture.referee?.toLowerCase().includes(text)
+  ) 
+})
 
-  const sortedMatches = [...filteredMatches].sort((a, b) => {
-    if (sort === 'date') {
-      return new Date(b.fixture.date) - new Date(a.fixture.date);
-    }
-    if (sort === 'name') {
-      const homeCompare = a.teams.home.name.localeCompare(b.teams.home.name);
-      if (homeCompare !== 0) return homeCompare;
-      return a.teams.away.name.localeCompare(b.teams.away.name);
-    }
-    if (sort === 'score') {
-      return b.goals.home + b.goals.away - (a.goals.home + a.goals.away);
-    }
-    return 0;
-  });
+const sortedMatches = [...filteredMatches].sort((a, b) => {
+  if (sort === 'date') {
+    return new Date(b.fixture.date) - new Date(a.fixture.date)
+  }
+  if (sort === 'name') {
+    return a.teams.home.name.localeCompare(b.teams.home.name)
+  }
+  if (sort === 'score') {
+    return (b.goals.home + b.goals.away) - (a.goals.home + a.goals.away)
+  }
+  return 0
+})
 
-  useEffect(() => {
-    loadMatches();
-  }, [loadMatches]);
+useEffect(() => {
+  const observer = new IntersectionObserver((entries) => {
+    const target = entries[0]
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const target = entries[0];
+    if(target.isIntersecting && limit < sortedMatches.length) {
+      setLoadingMore(true)
 
-      if (target.isIntersecting && limit < sortedMatches.length) {
-        setLoadingMore(true);
-
-        setTimeout(() => {
-          setLimit((prev) => prev + 10);
-          setLoadingMore(false);
-        }, 800);
+      setTimeout(() => {
+        setLimit((prev) => prev + 10) 
+        setLoadingMore(false)
+        }, 800) 
       }
-    });
+    })
 
-    const current = loaderRef.current;
-
-    if (current) {
-      observer.observe(current);
+    if(loaderRef.current){
+      observer.observe(loaderRef.current)
     }
 
     return () => {
-      if (current) {
-        observer.unobserve(current);
+      if(loaderRef.current){
+        observer.unobserve(loaderRef.current)
       }
-    };
-  }, [limit, sortedMatches.length]);
+    }
+}, [limit, sortedMatches.length])
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-40">
         <CircularProgress size={40} sx={{ color: 'var(--color-primary)' }} />
       </div>
-    );
+    )
   }
 
-  if (error) return <p className="text-red-500">{t(error)}</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-        <span>{t('items.title')}</span>
+        <span>Partidos</span>
       </h2>
 
-      <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
-        >
-          <option value="name" className="bg-slate-800 text-white">
-            {t('items.filter.name')}
-          </option>
-          <option value="date" className="bg-slate-800 text-white">
-            {t('items.filter.date')}
-          </option>
+    <div className="flex items-center gap-4">
+      <label htmlFor="sortSelect" className="text-base text-gray-300">
+        Sort by
+      </label>
+      <select 
+        id="sortSelect"
+        value={sort} 
+        onChange={(e) => setSort(e.target.value)}
+        className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
+      >
+        <option value="name" className='bg-slate-800 text-white'>
+          Nombre
+        </option>
 
-          <option value="score" className="bg-slate-800 text-white">
-            {t('items.filter.score')}
-          </option>
-        </select>
+        <option value="date" className='bg-slate-800 text-white'>
+          Fecha
+        </option>
 
-        <input
-          type="text"
-          placeholder={t('items.searchPlaceholder')}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
-        />
-      </div>
+        <option value="score" className='bg-slate-800 text-white'>
+          Goles totales
+        </option>
+      </select>
 
-      {sortedMatches.length === 0 && !loading && (
-        <p className="text-gray-400 text-center">{t('items.noMatches')}</p>
-      )}
+      <input 
+        type="text"
+        placeholder="buscar equipo..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
+      />
+    </div>
 
-      {sortedMatches.slice(0, limit).map((match) => (
-        <MatchCard key={match.fixture.id} match={match} />
+    {sortedMatches.length === 0 && !loading && (
+      <p className="text-gray-400 text-center">
+        No se encontraron los partidos
+      </p>
+    )}
+
+      {sortedMatches.slice(0, limit).map((match) =>(
+        <MatchCard key={match.fixture.id} match={match}/>
       ))}
 
-      <div ref={loaderRef} className="flex justify-center py-6">
-        {loadingMore && <CircularProgress size={28} sx={{ color: 'var(--color-primary)' }} />}
-      </div>
+    <div ref={loaderRef} className="flex justify-center py-6">
+      {loadingMore && (
+        <CircularProgress size={28} sx={{ color: "var(--color-primary)" }} />
+      )}
     </div>
-  );
+    </div>
+  )
 }
