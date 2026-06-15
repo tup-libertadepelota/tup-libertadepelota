@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import {
   Avatar,
@@ -17,13 +16,11 @@ import logo from "../assets/images/logo.png";
 
 export default function Settings() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
     setLogoutDialogOpen(false);
     logout();
-    navigate("/login");
   };
 
   const userName = user?.name || "Usuario";

@@ -20,7 +20,6 @@ export default function Login() {
     setGoogleLoading(true);
     try {
       await loginWithGoogle();
-      navigate("/");
     } catch (error) {
       console.error(error);
       setGoogleLoading(false);
