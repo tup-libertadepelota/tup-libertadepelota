@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../hooks/useAuth.js";
 import {
   Avatar,
   Button,
@@ -16,21 +15,22 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import logo from "../assets/images/logo.png";
 
 export default function Settings() {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
     setLogoutDialogOpen(false);
     logout();
-    navigate("/login");
   };
 
-  const user = {
-    name: "Franco Urrutia",
-    email: "franco.urrutia@email.com",
-    role: "Administrador",
-  };
+  const userName = user?.name || "Usuario";
+  const userEmail = user?.email || "Sin email";
+
+  const userInitials = userName
+  .split(" ")
+  .map((word) => word[0])
+  .join("")
+  .toUpperCase()
 
   return (
     <div>
@@ -66,6 +66,7 @@ export default function Settings() {
 
       <div className="bg-white/5 p-6 rounded-xl border border-white/10 flex items-center gap-5">
         <Avatar
+        src={user?.picture || undefined}
           sx={{
             width: 72,
             height: 72,
@@ -74,15 +75,12 @@ export default function Settings() {
             fontWeight: 700,
           }}
         >
-          {user.name
-            .split(" ")
-            .map((w) => w[0])
-            .join("")}
+          {userInitials}
         </Avatar>
 
         <div className="flex flex-col gap-1">
-          <span className="text-lg font-semibold text-white">{user.name}</span>
-          <span className="text-sm text-gray-400">{user.email}</span>
+          <span className="text-lg font-semibold text-white">{userName}</span>
+          <span className="text-sm text-gray-400">{userEmail}</span>
           <span className="text-xs text-[var(--color-primary-soft)] bg-[var(--color-primary)]/15 px-2 py-0.5 rounded-full w-fit mt-1">
             {user.role}
           </span>
