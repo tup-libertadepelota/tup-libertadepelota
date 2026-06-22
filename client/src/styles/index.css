@@ -2,11 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --color-primary: #578056;
   --color-primary-soft: #6f9a6e;
   --color-bg: #0b0f1a;
-  --color-card: rgba(255,255,255,0.05);
+  --color-card: rgba(255, 255, 255, 0.05);
   --color-text: #e5e7eb;
 }
