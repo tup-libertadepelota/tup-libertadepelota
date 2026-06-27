@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Divider } from "@mui/material";
-import logo from "../assets/images/logo.png";
-import { useAuth } from "../hooks/useAuth.js";
-import { loginWithGoogle } from "../services/authService.js";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Divider } from '@mui/material';
+import logo from '../assets/images/logo.png';
+import { useAuth } from '../hooks/useAuth.js';
+import { loginWithGoogle } from '../services/authService.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
   const [googleLoading, setGoogleLoading] = useState(false);
-  const { user} = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -33,24 +35,28 @@ export default function Login() {
       </div>
 
       <div className="flex items-center w-64 gap-3">
-        <Divider sx={{ flex: 1, borderColor: "#d1d5db" }} />
+        <Divider sx={{ flex: 1, borderColor: '#d1d5db' }} />
         <span className="text-gray-400 text-sm">o</span>
-        <Divider sx={{ flex: 1, borderColor: "#d1d5db" }} />
+        <Divider sx={{ flex: 1, borderColor: '#d1d5db' }} />
       </div>
 
-      <Button variant="outlined" onClick={handleGoogleLogin} disabled={googleLoading} sx={{
-          textTransform: "none",
+      <Button
+        variant="outlined"
+        onClick={handleGoogleLogin}
+        disabled={googleLoading}
+        sx={{
+          textTransform: 'none',
           fontWeight: 600,
-          fontSize: "0.95rem",
-          color: "#3c4043",
-          borderColor: "#dadce0",
-          backgroundColor: "#fff",
-          padding: "10px 24px",
-          borderRadius: "8px",
-          "&:hover": {
-            backgroundColor: "#f7f8f8",
-            borderColor: "#d2e3fc",
-            boxShadow: "0 1px 3px rgba(60,64,67,0.15)",
+          fontSize: '0.95rem',
+          color: '#3c4043',
+          borderColor: '#dadce0',
+          backgroundColor: '#fff',
+          padding: '10px 24px',
+          borderRadius: '8px',
+          '&:hover': {
+            backgroundColor: '#f7f8f8',
+            borderColor: '#d2e3fc',
+            boxShadow: '0 1px 3px rgba(60,64,67,0.15)',
           },
         }}
       >
@@ -73,7 +79,7 @@ export default function Login() {
               d="M12 6.04c1.47 0 2.79.5 3.83 1.49l2.87-2.87A9.98 9.98 0 0 0 12 2 10 10 0 0 0 3.07 6.51l3.34 2.58C7.2 7.8 9.4 6.04 12 6.04Z"
             />
           </svg>
-          {googleLoading ? "Conectando..." : "Iniciar sesión con Google"}
+          {googleLoading ? t('login.googleLoading') : t('login.googleButton')}
         </span>
       </Button>
     </div>
