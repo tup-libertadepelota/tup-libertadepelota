@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useRef, useState } from "react";
 import React, { useEffect, useRef, useState } from 'react';
 import MatchCard from '../components/MatchCard';
 import { useMatchesStore } from '../services/store/useMatchesStore';
@@ -49,11 +47,6 @@ export default function Items() {
   }, [loadMatches, season]);
 
   useEffect(() => {
-    setLimit(10);
-    setLoadingMore(false);
-  }, [season]);
-
-  useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const target = entries[0];
 
@@ -100,7 +93,11 @@ export default function Items() {
         <span className="text-sm text-gray-400">Año</span>
         <select
           value={season}
-          onChange={(e) => setSeason(Number(e.target.value))}
+          onChange={(e) => {
+            setSeason(Number(e.target.value));
+            setLimit(10);
+            setLoadingMore(false);
+          }}
           className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[8rem]"
         >
           {availableSeasons.map((year) => (
@@ -122,7 +119,6 @@ export default function Items() {
           <option value="date" className="bg-slate-800 text-white">
             {t('items.filter.date')}
           </option>
-
           <option value="score" className="bg-slate-800 text-white">
             {t('items.filter.score')}
           </option>
@@ -151,136 +147,3 @@ export default function Items() {
     </div>
   );
 }
-
-    return () => {
-      if (current) {
-        observer.unobserve(current);
-      }
-    };
-  }, [limit, sortedMatches.length]);
->>>>>>> origin/main
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <CircularProgress size={40} sx={{ color: 'var(--color-primary)' }} />
-      </div>
-    );
-  }
-
-  if (error) return <p className="text-red-500">{t(error)}</p>;
-
-  return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-        <span>{t('items.title')}</span>
-      </h2>
-
-      <div className="flex items-center gap-4">
-<<<<<<< HEAD
-        <label htmlFor="seasonSelect" className="text-base text-gray-300">
-          Año
-        </label>
-        <select
-          id="seasonSelect"
-          value={season}
-          onChange={(e) => setSeason(Number(e.target.value))}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[8rem]"
-        >
-          {availableSeasons.map((year) => (
-            <option key={year} value={year} className="bg-slate-800 text-white">
-              {year}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="sortSelect" className="text-base text-gray-300">
-          Sort by
-        </label>
-        <select
-          id="sortSelect"
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
-        >
-          <option value="name" className="bg-slate-800 text-white">
-            Nombre
-          </option>
-
-          <option value="date" className="bg-slate-800 text-white">
-            Fecha
-          </option>
-
-          <option value="score" className="bg-slate-800 text-white">
-            Goles totales
-          </option>
-        </select>
-
-        <input
-          type="text"
-          placeholder="buscar equipo..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
-        />
-      </div>
-
-    {sortedMatches.length === 0 && !loading && (
-      <p className="text-gray-400 text-center">
-        No se encontraron los partidos
-      </p>
-    )}
-
-=======
-        <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
-        >
-          <option value="name" className="bg-slate-800 text-white">
-            {t('items.filter.name')}
-          </option>
-          <option value="date" className="bg-slate-800 text-white">
-            {t('items.filter.date')}
-          </option>
-
-          <option value="score" className="bg-slate-800 text-white">
-            {t('items.filter.score')}
-          </option>
-        </select>
-
-        <input
-          type="text"
-          placeholder={t('items.searchPlaceholder')}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
-        />
-      </div>
-
-      {sortedMatches.length === 0 && !loading && (
-        <p className="text-gray-400 text-center">{t('items.noMatches')}</p>
-      )}
-
->>>>>>> origin/main
-      {sortedMatches.slice(0, limit).map((match) => (
-        <MatchCard key={match.fixture.id} match={match} />
-      ))}
-
-      <div ref={loaderRef} className="flex justify-center py-6">
-<<<<<<< HEAD
-        {loadingMore && (
-          <CircularProgress size={28} sx={{ color: "var(--color-primary)" }} />
-        )}
-      </div>
-    </div>
-  )
-}
-=======
-        {loadingMore && <CircularProgress size={28} sx={{ color: 'var(--color-primary)' }} />}
-      </div>
-    </div>
-  );
-}
->>>>>>> origin/main
