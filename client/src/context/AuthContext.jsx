@@ -1,32 +1,31 @@
-import React, { createContext, useState, useContext } from "react";
-
-
-const AuthContext = createContext(null);
+import React, { useState, useEffect } from "react";
+import { subscribeToAuthChanges, logoutUser } from "../services/authService.js";
+import { AuthContext } from "./authContext.js";
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("session") === "true";
-  })
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = subscribeToAuthChanges((nextUser) => {
+      setUser(nextUser);
+      setLoading(false);
+    });
 
-  const login = () => {
-    sessionStorage.setItem("session", "true");
-    setIsAuthenticated(true);
-  }
+    return () => unsubscribe();
+  }, []);
 
-  const logout = () => {
-    sessionStorage.removeItem("session");
-    setIsAuthenticated(false);
-  }
-
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{isAuthenticated, login, logout}}>
+    <AuthContext.Provider value={{ user, loading, logout }}>
       {children}
     </AuthContext.Provider>
-  )
-}
-
-export function useAuth() {
-  return useContext(AuthContext)
+  );
 }
