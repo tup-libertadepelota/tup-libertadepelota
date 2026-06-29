@@ -14,11 +14,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import logo from '../assets/images/logo.png';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
   const { user, logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setLogoutDialogOpen(false);
@@ -85,6 +87,25 @@ export default function Settings() {
             {user.role}
           </span>
         </div>
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/settings/account')}
+          className="ml-auto self-center shrink-0"
+          sx={{
+            textTransform: 'none',
+            fontWeight: 700,
+            ml: 'auto',
+            color: '#00ff9c',
+            borderColor: 'rgba(0,255,156,0.65)',
+            px: 4,
+            '&:hover': {
+              borderColor: '#00ff9c',
+              backgroundColor: 'rgba(0,255,156,0.08)',
+            },
+          }}
+        >
+          {t('settings.edit')}
+        </Button>
       </div>
 
       <Dialog
