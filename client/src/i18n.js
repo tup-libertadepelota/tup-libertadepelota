@@ -10,8 +10,12 @@ const resources = {
       },
       nav: {
         matches: 'Partidos',
+        information: 'Información',
         settings: 'Configuración',
         config: 'Config',
+      },
+      common: {
+        close: 'Cerrar',
       },
       login: {
         button: 'Iniciar sesión',
