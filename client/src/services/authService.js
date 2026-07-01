@@ -1,19 +1,22 @@
 import {
   onAuthStateChanged,
+  signInWithCredential,
   signInWithPopup,
+  GoogleAuthProvider,
   signOut as firebaseSignOut,
-} from "firebase/auth";
-import { auth, googleProvider } from "../firebase_config.js";
+} from 'firebase/auth';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { Capacitor } from '@capacitor/core';
+import { auth, googleProvider } from '../firebase_config.js';
 
 function mapFirebaseUser(firebaseUser) {
-
-  if (!firebaseUser) return null
+  if (!firebaseUser) return null;
 
   return {
-    email: firebaseUser.email || "",
+    email: firebaseUser.email || '',
     name: firebaseUser.displayName || firebaseUser.email,
-    picture: firebaseUser.photoURL || "",
-  }
+    picture: firebaseUser.photoURL || '',
+  };
 }
 
 export function subscribeToAuthChanges(callback) {
@@ -22,10 +25,21 @@ export function subscribeToAuthChanges(callback) {
   });
 }
 
-export function loginWithGoogle() {
-  return signInWithPopup(auth, googleProvider);
-}
-
 export function logoutUser() {
   return firebaseSignOut(auth);
+}
+
+export async function loginWithGoogle() {
+  if (Capacitor.isNativePlatform()) {
+    const result = await FirebaseAuthentication.signInWithGoogle();
+
+    const credential = GoogleAuthProvider.credential(
+      result.credential?.idToken,
+      result.credential?.accessToken
+    );
+
+    return signInWithCredential(auth, credential);
+  }
+
+  return signInWithPopup(auth, googleProvider);
 }
