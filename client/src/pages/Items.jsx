@@ -87,12 +87,12 @@ export default function Items() {
         <span>{t('items.title')}</span>
       </h2>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 min-w-0">
         <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
+          className="w-full sm:w-auto h-[3rem] px-4 rounded bg-white/10 text-base sm:min-w-[12rem]"
         >
           <option value="name" className="bg-slate-800 text-white">
             {t('items.filter.name')}
@@ -111,7 +111,7 @@ export default function Items() {
           placeholder={t('items.searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
+          className="w-full min-w-0 sm:flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
         />
       </div>
 
