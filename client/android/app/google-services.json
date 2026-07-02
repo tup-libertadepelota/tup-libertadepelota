@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "849021656176-vpi769g0m4rtv5phacbghnnnhk4kfrp5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.libertadepelota.app",
+            "certificate_hash": "4f5f470cc83ab628f850267d944c45dac355db7c"
+          }
+        },
+        {
           "client_id": "849021656176-12l8v9ffj3jtpqu7948gt19lpsdhfers.apps.googleusercontent.com",
           "client_type": 3
         }
