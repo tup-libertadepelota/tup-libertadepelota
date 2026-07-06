@@ -1,19 +1,14 @@
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut as firebaseSignOut,
-} from "firebase/auth";
-import { auth, googleProvider } from "../firebase_config.js";
+import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase_config.js';
 
 function mapFirebaseUser(firebaseUser) {
-
-  if (!firebaseUser) return null
+  if (!firebaseUser) return null;
 
   return {
-    email: firebaseUser.email || "",
+    email: firebaseUser.email || '',
     name: firebaseUser.displayName || firebaseUser.email,
-    picture: firebaseUser.photoURL || "",
-  }
+    picture: firebaseUser.photoURL || '',
+  };
 }
 
 export function subscribeToAuthChanges(callback) {

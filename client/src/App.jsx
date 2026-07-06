@@ -1,13 +1,13 @@
-import React from 'react'
-import './styles/index.css'
-import { AuthProvider } from './context/AuthContext.jsx'
-import { useAuth } from './hooks/useAuth.js'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import Login from './pages/Login'
-import ProtectedRoute from './components/ProtectedRoute.jsx'
-import Home from './pages/Home.jsx'
-import Items from './pages/Items.jsx'
-import Settings from './pages/Settings.jsx'
+import React from 'react';
+import './styles/index.css';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { useAuth } from './hooks/useAuth.js';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Home from './pages/Home.jsx';
+import Items from './pages/Items.jsx';
+import Settings from './pages/Settings.jsx';
 
 function App() {
   const { user, loading } = useAuth();
@@ -16,10 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/login"
-          element={user ? <Navigate to="/" /> : <Login />}
-        />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route
           path="/"
           element={
@@ -36,4 +33,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
