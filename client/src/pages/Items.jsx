@@ -15,6 +15,8 @@ export default function Items() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date');
   const [limit, setLimit] = useState(10);
+  const [season, setSeason] = useState(2024);
+  const availableSeasons = Array.from({ length: 7 }, (_, index) => 2020 + index);
 
   const filteredMatches = matches.filter((match) => {
     const text = search.toLowerCase();
@@ -42,8 +44,8 @@ export default function Items() {
   });
 
   useEffect(() => {
-    loadMatches();
-  }, [loadMatches]);
+    loadMatches(season);
+  }, [loadMatches, season]);
 
   useEffect(() => {
     trackEvent('view_matches', { match_count: matches.length });
@@ -93,6 +95,22 @@ export default function Items() {
       </h2>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 min-w-0">
+        <span className="text-sm text-gray-400">{t('items.season')}</span>
+        <select
+          value={season}
+          onChange={(e) => {
+            setSeason(Number(e.target.value));
+            setLimit(10);
+            setLoadingMore(false);
+          }}
+          className="w-full sm:w-auto h-[3rem] px-4 rounded bg-white/10 text-base sm:min-w-[8rem]"
+        >
+          {availableSeasons.map((year) => (
+            <option key={year} value={year} className="bg-slate-800 text-white">
+              {year}
+            </option>
+          ))}
+        </select>
         <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
         <select
           value={sort}
@@ -105,7 +123,6 @@ export default function Items() {
           <option value="date" className="bg-slate-800 text-white">
             {t('items.filter.date')}
           </option>
-
           <option value="score" className="bg-slate-800 text-white">
             {t('items.filter.score')}
           </option>
