@@ -44,13 +44,13 @@ export default function Sidebar() {
         PaperProps={{
           sx: {
             bgcolor: '#1a1f2e',
-            color: '#e5e7eb',
+            color: '#111827',
             borderRadius: 3,
             border: '1px solid rgba(255,255,255,0.1)',
           },
         }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>{t('nav.information')}</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#111827' }}>{t('nav.information')}</DialogTitle>
         <DialogContent>
           <div className="space-y-4 min-w-80">
             <div className="flex items-center gap-4">
@@ -63,7 +63,7 @@ export default function Sidebar() {
                 <span className="text-lg font-bold text-[var(--color-primary)]">
                   {t('app.title')}
                 </span>
-                <p className="text-xs text-gray-500">{t('app.subtitle')}</p>
+                <p className="text-xs text-gray-700">{t('app.subtitle')}</p>
               </div>
             </div>
 
@@ -71,12 +71,12 @@ export default function Sidebar() {
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-400">{t('settings.version')}</span>
-                <span className="text-white font-mono">1.0.0</span>
+                <span className="text-gray-700">{t('settings.version')}</span>
+                <span className="text-gray-900 font-mono">1.0.0</span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-gray-400">{t('settings.userAgent')}</span>
-                <span className="text-white/70 text-xs font-mono break-all bg-white/5 px-3 py-2 rounded-lg">
+                <span className="text-gray-700">{t('settings.userAgent')}</span>
+                <span className="text-gray-800 text-xs font-mono break-all bg-gray-100 px-3 py-2 rounded-lg">
                   {navigator.userAgent}
                 </span>
               </div>
@@ -84,7 +84,12 @@ export default function Sidebar() {
           </div>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setInformationOpen(false)} sx={{ textTransform: 'none' }}>
+          <Button
+            onClick={() => setInformationOpen(false)}
+            sx={{ textTransform: 'none' }}
+            onClick={() => setInformationOpen(false)}
+            sx={{ textTransform: 'none', color: '#2563eb' }}
+          >
             {t('common.close')}
           </Button>
         </DialogActions>
