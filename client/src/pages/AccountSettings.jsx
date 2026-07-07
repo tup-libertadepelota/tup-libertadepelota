@@ -3,7 +3,9 @@ import { Avatar, Button, Divider, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { getUserProfile, saveUserProfile } from '../services/userProfileService.js';
 
@@ -37,14 +39,23 @@ const inputSx = {
   },
 };
 
+const ADDRESS_MIN_LENGTH = 2;
+const ADDRESS_MAX_LENGTH = 128;
+const PHONE_MIN_LENGTH = 2;
+const PHONE_MAX_LENGTH = 15;
+const PHONE_REGEX = /^\d{2,15}$/;
+
 export default function AccountSettings() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const initialProfile = getInitialProfile(user?.email);
   const [birthDate, setBirthDate] = useState(initialProfile.birthDate);
   const [address, setAddress] = useState(initialProfile.address);
   const [phones, setPhones] = useState(initialProfile.phones);
+  const [errors, setErrors] = useState({});
   const birthDateInputRef = useRef(null);
+  const today = new Date().toISOString().split('T')[0];
 
   const userName = user?.name || t('settings.defaultUser');
   const userEmail = user?.email || t('settings.noEmail');
@@ -56,8 +67,9 @@ export default function AccountSettings() {
     .toUpperCase();
 
   const handlePhoneChange = (index, value) => {
+    const digitsOnly = value.replace(/\D/g, '').slice(0, PHONE_MAX_LENGTH);
     setPhones((currentPhones) =>
-      currentPhones.map((phone, phoneIndex) => (phoneIndex === index ? value : phone))
+      currentPhones.map((phone, phoneIndex) => (phoneIndex === index ? digitsOnly : phone))
     );
   };
 
@@ -69,14 +81,47 @@ export default function AccountSettings() {
     setPhones((currentPhones) => currentPhones.filter((_, phoneIndex) => phoneIndex !== index));
   };
 
+  const validateForm = () => {
+    const nextErrors = {};
+    const trimmedAddress = address.trim();
+
+    if (trimmedAddress.length < ADDRESS_MIN_LENGTH || trimmedAddress.length > ADDRESS_MAX_LENGTH) {
+      nextErrors.address = t('accountSettings.addressLengthError', {
+        min: ADDRESS_MIN_LENGTH,
+        max: ADDRESS_MAX_LENGTH,
+      });
+    }
+
+    if (birthDate && birthDate > today) {
+      nextErrors.birthDate = t('accountSettings.birthDateMaxError');
+    }
+
+    phones.forEach((phone, index) => {
+      if (!PHONE_REGEX.test(phone)) {
+        nextErrors[`phone-${index}`] = t('accountSettings.phoneLengthError', {
+          min: PHONE_MIN_LENGTH,
+          max: PHONE_MAX_LENGTH,
+        });
+      }
+    });
+
+    setErrors(nextErrors);
+
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     saveUserProfile(user?.email, {
       birthDate,
-      address,
-      phones: phones.filter((phone) => phone.trim() !== ''),
+      address: address.trim(),
+      phones,
     });
+
+    navigate('/settings');
   };
 
   return (
@@ -123,8 +168,15 @@ export default function AccountSettings() {
             onClick={() => birthDateInputRef.current?.showPicker?.()}
             value={birthDate}
             onChange={(event) => setBirthDate(event.target.value)}
+            error={Boolean(errors.birthDate)}
+            helperText={errors.birthDate}
             fullWidth
             sx={inputSx}
+            slotProps={{
+              htmlInput: {
+                max: today,
+              },
+            }}
           />
         </div>
 
@@ -132,9 +184,17 @@ export default function AccountSettings() {
           label={t('accountSettings.address')}
           type="text"
           value={address}
-          onChange={(event) => setAddress(event.target.value)}
+          onChange={(event) => setAddress(event.target.value.slice(0, ADDRESS_MAX_LENGTH))}
+          error={Boolean(errors.address)}
+          helperText={errors.address}
           fullWidth
           sx={inputSx}
+          slotProps={{
+            htmlInput: {
+              minLength: ADDRESS_MIN_LENGTH,
+              maxLength: ADDRESS_MAX_LENGTH,
+            },
+          }}
         />
 
         <div className="space-y-3">
@@ -162,8 +222,18 @@ export default function AccountSettings() {
                 label={`${t('accountSettings.phone')} ${index + 1}`}
                 value={phone}
                 onChange={(event) => handlePhoneChange(index, event.target.value)}
+                error={Boolean(errors[`phone-${index}`])}
+                helperText={errors[`phone-${index}`]}
                 fullWidth
                 sx={inputSx}
+                slotProps={{
+                  htmlInput: {
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                    minLength: PHONE_MIN_LENGTH,
+                    maxLength: PHONE_MAX_LENGTH,
+                  },
+                }}
               />
 
               {phones.length > 1 && (
@@ -180,7 +250,26 @@ export default function AccountSettings() {
           ))}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="outlined"
+            startIcon={<CancelIcon />}
+            onClick={() => navigate('/settings')}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 600,
+              color: '#9ca3af',
+              borderColor: 'rgba(156,163,175,0.45)',
+              '&:hover': {
+                borderColor: '#9ca3af',
+                backgroundColor: 'rgba(156,163,175,0.08)',
+              },
+            }}
+          >
+            <span>{t('accountSettings.cancel')}</span>
+          </Button>
+
           <Button
             type="submit"
             variant="contained"

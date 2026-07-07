@@ -22,6 +22,11 @@ const resources = {
       settings: {
         title: 'Configuración',
         defaultUser: 'Usuario',
+        userInformation: 'Información del usuario',
+        name: 'Nombre',
+        email: 'Correo',
+        role: 'Rol',
+        noInfo: 'No informado',
         noEmail: 'Sin email',
         logout: 'Cerrar sesión',
         userOptions: 'Opciones del usuario',
@@ -44,6 +49,10 @@ const resources = {
         phone: 'Teléfono',
         addPhone: 'Agregar teléfono',
         saveChanges: 'Guardar cambios',
+        cancel: 'Cancelar',
+        addressLengthError: 'La dirección debe tener entre {{min}} y {{max}} caracteres',
+        birthDateMaxError: 'La fecha no puede ser mayor a la actual',
+        phoneLengthError: 'El teléfono debe tener entre {{min}} y {{max}} números',
       },
       items: {
         title: 'Partidos',
