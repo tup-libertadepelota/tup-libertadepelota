@@ -84,12 +84,7 @@ export default function Sidebar() {
           </div>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button
-            onClick={() => setInformationOpen(false)}
-            sx={{ textTransform: 'none' }}
-            onClick={() => setInformationOpen(false)}
-            sx={{ textTransform: 'none', color: '#2563eb' }}
-          >
+          <Button onClick={() => setInformationOpen(false)} sx={{ textTransform: 'none' }}>
             {t('common.close')}
           </Button>
         </DialogActions>
