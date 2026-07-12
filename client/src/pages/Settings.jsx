@@ -8,11 +8,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Divider,
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import logo from '../assets/images/logo.png';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { trackEvent } from '../utils/analytics.js';
@@ -128,40 +125,6 @@ export default function Settings() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <div className="bg-white/5 p-6 rounded-xl border border-white/10 space-y-4">
-        <div className="flex items-center gap-2 text-gray-400 text-sm font-medium mb-2">
-          <InfoOutlinedIcon fontSize="small" />
-          <span>{t('settings.aboutTitle')}</span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <img
-            src={logo}
-            alt="Logo LibertaDEpelota"
-            className="w-14 h-14 rounded-xl object-contain"
-          />
-          <div>
-            <span className="text-lg font-bold text-[var(--color-primary)]">{t('app.title')}</span>
-            <p className="text-xs text-gray-500">{t('app.subtitle')}</p>
-          </div>
-        </div>
-
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
-
-        <div className="space-y-2 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-400">{t('settings.version')}</span>
-            <span className="text-white font-mono">1.0.0</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-gray-400">{t('settings.userAgent')}</span>
-            <span className="text-white/70 text-xs font-mono break-all bg-white/5 px-3 py-2 rounded-lg">
-              {navigator.userAgent}
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
