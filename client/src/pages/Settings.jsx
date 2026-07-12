@@ -14,14 +14,19 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import logo from '../assets/images/logo.png';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { getUserProfile } from '../services/userProfileService.js';
+import { useEffect } from 'react';
+import { trackEvent } from '../utils/analytics.js';
+
 
 export default function Settings() {
   const { user, logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    trackEvent('view_settings');
+  }, []);
 
   const handleLogout = () => {
     setLogoutDialogOpen(false);

@@ -59,6 +59,7 @@ const resources = {
         sortBy: 'Ordenar por',
         searchPlaceholder: 'Buscar equipo...',
         noMatches: 'No se encontraron los partidos',
+        season: 'Año',
         filter: {
           name: 'Nombre',
           date: 'Fecha',

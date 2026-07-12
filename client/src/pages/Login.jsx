@@ -5,6 +5,8 @@ import logo from '../assets/images/logo.png';
 import { useAuth } from '../hooks/useAuth.js';
 import { loginWithGoogle } from '../services/authService.js';
 import { useTranslation } from 'react-i18next';
+import * as Sentry from '@sentry/react';
+import { trackEvent } from '../utils/analytics.js';
 
 export default function Login() {
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -21,9 +23,32 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     try {
-      await loginWithGoogle();
+      const credential = await loginWithGoogle();
+
+      if (credential?.user?.email) {
+        trackEvent('login_success', {
+          method: 'google',
+          email: credential.user.email,
+        });
+
+        Sentry.setUser({
+          email: credential.user.email,
+          username: credential.user.displayName || credential.user.email,
+        });
+
+        Sentry.withScope((scope) => {
+          scope.setUser({
+            email: credential.user.email,
+            username: credential.user.displayName || credential.user.email,
+          });
+          scope.setExtra('login_method', 'google');
+          scope.setExtra('source', 'TP9 analytics');
+          Sentry.captureException(new Error(`Sentry test error for ${credential.user.email}`));
+        });
+      }
     } catch (error) {
       console.error(error);
+    } finally {
       setGoogleLoading(false);
     }
   };
