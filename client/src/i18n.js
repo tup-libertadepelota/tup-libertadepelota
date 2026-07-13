@@ -10,8 +10,12 @@ const resources = {
       },
       nav: {
         matches: 'Partidos',
+        information: 'Información',
         settings: 'Configuración',
         config: 'Config',
+      },
+      common: {
+        close: 'Cerrar',
       },
       login: {
         button: 'Iniciar sesión',
@@ -39,6 +43,7 @@ const resources = {
         sortBy: 'Ordenar por',
         searchPlaceholder: 'Buscar equipo...',
         noMatches: 'No se encontraron los partidos',
+        season: 'Año',
         filter: {
           name: 'Nombre',
           date: 'Fecha',

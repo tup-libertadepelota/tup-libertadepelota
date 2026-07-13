@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:visualizer": "node ./scripts/generate-visualizer.mjs",
     "lint": "eslint . --ext .js,.jsx",
     "lint:staged": "lint-staged",
     "format": "prettier --write \"src/**/*.{js,jsx,css,html}\"",
@@ -35,6 +36,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
+    "@sentry/react": "^10.57.0",
     "firebase": "^12.13.0",
     "i18next": "^26.2.0",
     "react": "^19.2.4",

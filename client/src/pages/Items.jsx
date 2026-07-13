@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MatchCard from '../components/MatchCard';
 import { useMatchesStore } from '../services/store/useMatchesStore';
-import { Button, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { trackEvent } from '../utils/analytics.js';
 
 export default function Items() {
   const loaderRef = useRef(null);
@@ -14,6 +15,8 @@ export default function Items() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date');
   const [limit, setLimit] = useState(10);
+  const [season, setSeason] = useState(2024);
+  const availableSeasons = Array.from({ length: 7 }, (_, index) => 2020 + index);
 
   const filteredMatches = matches.filter((match) => {
     const text = search.toLowerCase();
@@ -41,8 +44,12 @@ export default function Items() {
   });
 
   useEffect(() => {
-    loadMatches();
-  }, [loadMatches]);
+    loadMatches(season);
+  }, [loadMatches, season]);
+
+  useEffect(() => {
+    trackEvent('view_matches', { match_count: matches.length });
+  }, [matches.length]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -87,12 +94,28 @@ export default function Items() {
         <span>{t('items.title')}</span>
       </h2>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 min-w-0">
+        <span className="text-sm text-gray-400">{t('items.season')}</span>
+        <select
+          value={season}
+          onChange={(e) => {
+            setSeason(Number(e.target.value));
+            setLimit(10);
+            setLoadingMore(false);
+          }}
+          className="w-full sm:w-auto h-[3rem] px-4 rounded bg-white/10 text-base sm:min-w-[8rem]"
+        >
+          {availableSeasons.map((year) => (
+            <option key={year} value={year} className="bg-slate-800 text-white">
+              {year}
+            </option>
+          ))}
+        </select>
         <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="h-[3rem] px-4 rounded bg-white/10 text-base min-w-[12rem]"
+          className="w-full sm:w-auto h-[3rem] px-4 rounded bg-white/10 text-base sm:min-w-[12rem]"
         >
           <option value="name" className="bg-slate-800 text-white">
             {t('items.filter.name')}
@@ -100,7 +123,6 @@ export default function Items() {
           <option value="date" className="bg-slate-800 text-white">
             {t('items.filter.date')}
           </option>
-
           <option value="score" className="bg-slate-800 text-white">
             {t('items.filter.score')}
           </option>
@@ -111,7 +133,7 @@ export default function Items() {
           placeholder={t('items.searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
+          className="w-full min-w-0 sm:flex-1 h-[3rem] px-4 rounded bg-white/10 text-base"
         />
       </div>
 
