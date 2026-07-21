@@ -13,6 +13,9 @@ export default defineConfig({
         'favicons/favicon.svg',
         'favicons/apple-touch-icon.png',
       ],
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         id: '/',
         name: 'LibertaDEpelota',
