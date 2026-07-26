@@ -13,7 +13,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { trackEvent } from '../utils/analytics.js';
-
+import { useNavigate } from 'react-router-dom';
+import { getUserProfile } from '../services/userProfileService.js';
 
 export default function Settings() {
   const { user, logout } = useAuth();
