@@ -13,11 +13,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { trackEvent } from '../utils/analytics.js';
+import { useNavigate } from 'react-router-dom';
+import { getUserProfile } from '../services/userProfileService.js';
 
 export default function Settings() {
   const { user, logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     trackEvent('view_settings');
@@ -30,6 +33,10 @@ export default function Settings() {
 
   const userName = user?.name || t('settings.defaultUser');
   const userEmail = user?.email || t('settings.noEmail');
+  const userProfile = getUserProfile(user?.email);
+  const userPhones = Array.isArray(userProfile.phones)
+    ? userProfile.phones.filter((phone) => phone.trim() !== '')
+    : [];
 
   const userInitials = userName
     .split(' ')
@@ -38,7 +45,7 @@ export default function Settings() {
     .toUpperCase();
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-[#00ff9c]">{t('settings.title')}</h2>
 
@@ -85,8 +92,76 @@ export default function Settings() {
           <span className="text-lg font-semibold text-white">{userName}</span>
           <span className="text-sm text-gray-400">{userEmail}</span>
           <span className="text-xs text-[var(--color-primary-soft)] bg-[var(--color-primary)]/15 px-2 py-0.5 rounded-full w-fit mt-1">
-            {user.role}
+            {user?.role || t('settings.noInfo')}
           </span>
+        </div>
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/settings/account')}
+          className="ml-auto self-center shrink-0"
+          sx={{
+            textTransform: 'none',
+            fontWeight: 700,
+            ml: 'auto',
+            color: '#00ff9c',
+            borderColor: 'rgba(0,255,156,0.65)',
+            px: 4,
+            '&:hover': {
+              borderColor: '#00ff9c',
+              backgroundColor: 'rgba(0,255,156,0.08)',
+            },
+          }}
+        >
+          {t('settings.edit')}
+        </Button>
+      </div>
+
+      <div className="bg-white/5 p-6 rounded-xl border border-white/10 space-y-4">
+        <h3 className="text-lg font-semibold text-white">{t('settings.userInformation')}</h3>
+
+        <div className="grid gap-3 text-sm sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400">{t('settings.name')}</span>
+            <span className="text-white">{userName}</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400">{t('settings.email')}</span>
+            <span className="text-white break-all">{userEmail}</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400">{t('settings.role')}</span>
+            <span className="text-white">{user?.role || t('settings.noInfo')}</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400">{t('accountSettings.birthDate')}</span>
+            <span className="text-white">{userProfile.birthDate || t('settings.noInfo')}</span>
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <span className="text-gray-400">{t('accountSettings.address')}</span>
+            <span className="text-white">{userProfile.address || t('settings.noInfo')}</span>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:col-span-2">
+            <span className="text-gray-400">{t('accountSettings.phones')}</span>
+            {userPhones.length ? (
+              <div className="flex flex-wrap gap-2">
+                {userPhones.map((phone, index) => (
+                  <span
+                    key={`${phone}-${index}`}
+                    className="rounded-full bg-white/10 px-3 py-1 text-sm text-white"
+                  >
+                    {phone}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <span className="text-white">{t('settings.noInfo')}</span>
+            )}
+          </div>
         </div>
       </div>
 
