@@ -1,12 +1,4 @@
-import {
-  onAuthStateChanged,
-  signInWithCredential,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut as firebaseSignOut,
-} from 'firebase/auth';
-import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-import { Capacitor } from '@capacitor/core';
+import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase_config.js';
 
 function mapFirebaseUser(firebaseUser) {
@@ -30,16 +22,5 @@ export function logoutUser() {
 }
 
 export async function loginWithGoogle() {
-  if (Capacitor.isNativePlatform()) {
-    const result = await FirebaseAuthentication.signInWithGoogle();
-
-    const credential = GoogleAuthProvider.credential(
-      result.credential?.idToken,
-      result.credential?.accessToken
-    );
-
-    return signInWithCredential(auth, credential);
-  }
-
   return signInWithPopup(auth, googleProvider);
 }

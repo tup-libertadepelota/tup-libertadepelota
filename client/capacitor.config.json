@@ -1,10 +1,5 @@
 {
   "appId": "com.libertadepelota.app",
   "appName": "LibertaDEpelota",
-  "webDir": "dist",
-  "plugins": {
-    "FirebaseAuthentication": {
-      "providers": ["google.com"]
-    }
-  }
+  "webDir": "dist"
 }
