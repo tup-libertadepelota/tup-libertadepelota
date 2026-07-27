@@ -17,10 +17,10 @@ export function subscribeToAuthChanges(callback) {
   });
 }
 
-export function loginWithGoogle() {
-  return signInWithPopup(auth, googleProvider);
-}
-
 export function logoutUser() {
   return firebaseSignOut(auth);
+}
+
+export async function loginWithGoogle() {
+  return signInWithPopup(auth, googleProvider);
 }
