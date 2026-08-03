@@ -13,7 +13,7 @@ export const useMatchesStore = create((set) => ({
     try {
       const storedMatches = getStoredMatches();
 
-      if (storedMatches) {
+      if (storedMatches && storedMatches.length > 0) {
         set({
           matches: storedMatches,
           loading: false,
