@@ -1,38 +1,11 @@
-const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:3001' : '';
-
-function normalizeMatch(match) {
-  return {
-    id: match.id,
-    league: match.league,
-    status: match.status,
-    active: match.active,
-    fixture: {
-      id: match.id,
-      date: match.date,
-      referee: '',
-      venue: {
-        name: match.league,
-      },
-    },
-    teams: {
-      home: {
-        name: match.homeTeam,
-        logo: '/favicons/favicon.svg',
-      },
-      away: {
-        name: match.awayTeam,
-        logo: '/favicons/favicon.svg',
-      },
-    },
-    goals: {
-      home: null,
-      away: null,
-    },
-  };
-}
+const FIXTURES_URL = 'https://v3.football.api-sports.io/fixtures?league=128&season=2024';
 
 export async function fetchMatches() {
-  const response = await fetch(`${API_BASE_URL}/api/matches`);
+  const response = await fetch(FIXTURES_URL, {
+    headers: {
+      'x-apisports-key': import.meta.env.VITE_API_KEY_FOOTBALL,
+    },
+  });
 
   if (!response.ok) {
     throw new Error('errors.api');
@@ -40,5 +13,5 @@ export async function fetchMatches() {
 
   const data = await response.json();
 
-  return data.map(normalizeMatch);
+  return data.response;
 }

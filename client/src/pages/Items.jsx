@@ -18,11 +18,7 @@ export default function Items() {
   const [season, setSeason] = useState(2024);
   const availableSeasons = Array.from({ length: 7 }, (_, index) => 2020 + index);
 
-  const seasonMatches = matches.filter((match) => {
-    return new Date(match.fixture.date).getFullYear() === season;
-  });
-
-  const filteredMatches = seasonMatches.filter((match) => {
+  const filteredMatches = matches.filter((match) => {
     const text = search.toLowerCase();
     return (
       match.teams.home.name.toLowerCase().includes(search.toLowerCase()) ||
