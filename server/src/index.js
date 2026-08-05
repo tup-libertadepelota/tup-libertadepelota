@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import matchesRouter from './routes/matches.routes.js';
-import { setMatches } from './data/matches.memory.js';
+import { initializeMatches } from './data/matches.firestore.js';
 
 dotenv.config();
 
@@ -33,7 +33,7 @@ async function loadInitialMatches() {
     active: true,
   }));
 
-  setMatches(matches);
+  await initializeMatches(matches);
 }
 
 loadInitialMatches()
