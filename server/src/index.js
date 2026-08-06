@@ -28,6 +28,16 @@ app.use(
   })
 );
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Libertad e Pelota API',
+    status: 'OK',
+    version: '1.0.0',
+    endpoints: {
+      matches: '/api/matches',
+    },
+  });
+});
 
 app.use('/api', matchesRouter);
 
