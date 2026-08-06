@@ -5,6 +5,10 @@
 # Dependencias
 node_modules/
 
+# Variables de entorno
+.env
+.env.*
+
 # Sistema operativo
 .DS_Store
 Thumbs.db
