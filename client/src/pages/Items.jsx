@@ -10,45 +10,58 @@ export default function Items() {
   const { t } = useTranslation();
 
   const { matches, loading, error, loadMatches } = useMatchesStore();
-
   const [loadingMore, setLoadingMore] = useState(false);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date');
   const [limit, setLimit] = useState(10);
-  const [season, setSeason] = useState(2024);
+  const [season, setSeason] = useState(new Date().getFullYear());
+
   const availableSeasons = Array.from({ length: 7 }, (_, index) => 2020 + index);
 
-  const filteredMatches = matches.filter((match) => {
+  const seasonMatches = matches.filter((match) => {
+    return new Date(match.date).getFullYear() === season;
+  });
+
+  const filteredMatches = seasonMatches.filter((match) => {
     const text = search.toLowerCase();
+
+    const homeTeam = match.homeTeam.toLowerCase();
+    const awayTeam = match.awayTeam.toLowerCase();
+    const league = match.league.toLowerCase();
+    const status = match.status.toLowerCase();
+
     return (
-      match.teams.home.name.toLowerCase().includes(search.toLowerCase()) ||
-      match.teams.away.name.toLowerCase().includes(search.toLowerCase()) ||
-      match.fixture.venue.name?.toLowerCase().includes(text) ||
-      match.fixture.referee?.toLowerCase().includes(text)
+      homeTeam.includes(text) ||
+      awayTeam.includes(text) ||
+      league.includes(text) ||
+      status.includes(text)
     );
   });
 
   const sortedMatches = [...filteredMatches].sort((a, b) => {
     if (sort === 'date') {
-      return new Date(b.fixture.date) - new Date(a.fixture.date);
+      return new Date(b.date) - new Date(a.date);
     }
+
     if (sort === 'name') {
-      const homeCompare = a.teams.home.name.localeCompare(b.teams.home.name);
+      const homeCompare = a.homeTeam.localeCompare(b.homeTeam);
+
       if (homeCompare !== 0) return homeCompare;
-      return a.teams.away.name.localeCompare(b.teams.away.name);
+
+      return a.awayTeam.localeCompare(b.awayTeam);
     }
-    if (sort === 'score') {
-      return b.goals.home + b.goals.away - (a.goals.home + a.goals.away);
-    }
+
     return 0;
   });
 
   useEffect(() => {
-    loadMatches(season);
-  }, [loadMatches, season]);
+    loadMatches();
+  }, [loadMatches]);
 
   useEffect(() => {
-    trackEvent('view_matches', { match_count: matches.length });
+    trackEvent('view_matches', {
+      match_count: matches.length,
+    });
   }, [matches.length]);
 
   useEffect(() => {
@@ -86,7 +99,9 @@ export default function Items() {
     );
   }
 
-  if (error) return <p className="text-red-500">{t(error)}</p>;
+  if (error) {
+    return <p className="text-red-500">{t(error)}</p>;
+  }
 
   return (
     <div className="space-y-4">
@@ -96,6 +111,7 @@ export default function Items() {
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 min-w-0">
         <span className="text-sm text-gray-400">{t('items.season')}</span>
+
         <select
           value={season}
           onChange={(e) => {
@@ -111,7 +127,9 @@ export default function Items() {
             </option>
           ))}
         </select>
+
         <span className="text-sm text-gray-400">{t('items.sortBy')}</span>
+
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
@@ -120,11 +138,9 @@ export default function Items() {
           <option value="name" className="bg-slate-800 text-white">
             {t('items.filter.name')}
           </option>
+
           <option value="date" className="bg-slate-800 text-white">
             {t('items.filter.date')}
-          </option>
-          <option value="score" className="bg-slate-800 text-white">
-            {t('items.filter.score')}
           </option>
         </select>
 

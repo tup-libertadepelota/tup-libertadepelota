@@ -81,6 +81,9 @@ const resources = {
       },
       errors: {
         api: 'Error en la API',
+        apiConfiguration: 'La URL del backend no estÃ¡ configurada',
+        unauthenticated: 'Tu sesiÃ³n no es vÃ¡lida o venció. IniciÃ¡ sesiÃ³n nuevamente.',
+        forbidden: 'Tu usuario no tiene permisos para realizar esta acciÃ³n.',
         loadMatches: 'No se pudieron cargar los partidos',
       },
     },

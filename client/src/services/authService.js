@@ -24,3 +24,12 @@ export function logoutUser() {
 export async function loginWithGoogle() {
   return signInWithPopup(auth, googleProvider);
 }
+export async function getCurrentUserToken() {
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    return null;
+  }
+
+  return currentUser.getIdToken();
+}

@@ -51,6 +51,11 @@ export async function getMatches() {
   return snapshot.docs.map((doc) => doc.data());
 }
 
+export async function hasMatches() {
+  const snapshot = await matchesCollection().limit(1).get();
+  return !snapshot.empty;
+}
+
 export async function getMatchById(id) {
   const docRef = await findMatchDocRef(id);
 

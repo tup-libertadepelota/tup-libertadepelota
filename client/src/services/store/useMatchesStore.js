@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { fetchMatches } from '../matchesApiService';
+import { fetchMatches, MatchesApiError } from '../matchesApiService';
 import { getStoredMatches, saveMatches } from '../storageService';
 
 export const useMatchesStore = create((set) => ({
@@ -33,7 +33,7 @@ export const useMatchesStore = create((set) => ({
       console.error(error);
 
       set({
-        error: 'errors.loadMatches',
+        error: error instanceof MatchesApiError ? error.code : 'errors.loadMatches',
         loading: false,
       });
     }

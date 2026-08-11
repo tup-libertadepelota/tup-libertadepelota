@@ -1,4 +1,4 @@
-const MATCHES_KEY = 'matches';
+const MATCHES_KEY = 'matches-v2';
 const CACHE_DURATION = 5 * 60 * 1000;
 
 export function getStoredMatches() {
